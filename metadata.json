@@ -1,0 +1,6 @@
+{
+  "name": "辦公室抽屜櫃重新分配與對照系統",
+  "description": "辦公室活動抽屜櫃重新排列與搬遷位置對照系統，提供個人快速查詢、視覺化區域平面圖與搬遷進度追蹤。",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
