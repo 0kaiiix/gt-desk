@@ -16,7 +16,7 @@ import {
   fetchAllPedestalsFromFirestore,
 } from './lib/firebase';
 
-const STORAGE_KEY = 'OFFICE_PEDESTALS_CUSTOMER_MAP_V23_CLEAN_LOCATION_CODES';
+const STORAGE_KEY = 'OFFICE_PEDESTALS_CUSTOMER_MAP_V25_EXACT_NEW_LOCATIONS';
 
 export default function App() {
   const [pedestals, setPedestals] = useState<Pedestal[]>(() => {

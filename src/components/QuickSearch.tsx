@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Search, CheckCircle2, Clock, Copy, ShieldAlert, User, MapPin, X, Check, CheckSquare, Users } from 'lucide-react';
 import { Pedestal } from '../types';
-import { DISTINCT_STAFF_NAMES } from '../data/initialData';
+import { DISTINCT_STAFF_NAMES, parseLocationCode } from '../data/initialData';
 
 interface QuickSearchProps {
   pedestals: Pedestal[];
@@ -42,7 +42,9 @@ export const QuickSearch: React.FC<QuickSearchProps> = ({
   const activePedestal = selectedPedestal || (suggestions.length > 0 ? suggestions[0] : null);
 
   const handleCopyText = (pedestal: Pedestal) => {
-    const text = `【抽屜換抽屜 搬遷指示】\n目前客戶編號：${pedestal.customerId}\n經辦同仁：${pedestal.userName}\n舊位置：${pedestal.oldCode}\n新位置：${pedestal.newCode}\n放置區域：${pedestal.zone} 第 ${pedestal.colIndex} 排 (第 ${pedestal.slotIndex} 格)\n搬遷指示：請將舊位置 [${pedestal.oldCode}] 整座抽屜移至新位置 [${pedestal.newCode}]。`;
+    const pOld = parseLocationCode(pedestal.oldCode);
+    const pNew = parseLocationCode(pedestal.newLocation || pedestal.newCode);
+    const text = `【抽屜換抽屜 搬遷指示】\n目前客戶編號：${pedestal.customerId}\n經辦同仁：${pedestal.userName}\n舊位置：${pedestal.oldCode} (${pOld.formatted})\n新位置：${pedestal.newCode} (${pNew.formatted})\n搬遷指示：請將舊位置 [${pedestal.oldCode}] 整座抽屜移至新位置 [${pedestal.newCode}]。`;
     navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
@@ -137,7 +139,7 @@ export const QuickSearch: React.FC<QuickSearchProps> = ({
                           </span>
                         </div>
                         <div className="text-xs text-slate-500">
-                          舊位置: <span className="font-mono text-slate-700 font-semibold">{p.oldCode}</span> ➔ 新位置: <span className="font-mono text-blue-700 font-bold">{p.newCode}</span> ({p.zone})
+                          舊位置: <span className="font-mono text-slate-700 font-semibold">{p.oldCode}</span> ➔ 新位置: <span className="font-mono text-blue-700 font-bold">{p.newCode}</span>
                         </div>
                       </div>
                     </div>
@@ -251,7 +253,7 @@ export const QuickSearch: React.FC<QuickSearchProps> = ({
                           </span>
                         </div>
                         <div className="text-[11px] text-slate-500 font-mono mt-0.5">
-                          {p.oldCode} ➔ <strong className="text-slate-900">{p.newCode}</strong> ({p.zone})
+                          {p.oldCode} ➔ <strong className="text-slate-900">{p.newCode}</strong>
                         </div>
                       </div>
                     </div>
@@ -277,139 +279,150 @@ export const QuickSearch: React.FC<QuickSearchProps> = ({
         )}
 
         {/* Prominent Large Result Card */}
-        {activePedestal ? (
-          <div className="mt-5 max-w-3xl mx-auto bg-white rounded-3xl p-5 sm:p-6 shadow-xl border-2 border-blue-200/80 relative overflow-hidden transition-all animate-fadeIn">
-            {/* Background Decorative Accent */}
-            <div className="absolute -top-12 -right-12 w-36 h-36 bg-blue-100/50 rounded-full blur-2xl pointer-events-none" />
+        {activePedestal ? (() => {
+          const parsedOld = parseLocationCode(activePedestal.oldCode);
+          const parsedNew = parseLocationCode(activePedestal.newLocation || activePedestal.newCode);
 
-            {/* Top Bar of Result Card */}
-            <div className="flex flex-wrap items-center justify-between border-b border-slate-100 pb-4 mb-4 gap-2">
-              <div className="flex items-center space-x-3">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white flex items-center justify-center font-bold text-lg shadow-md shadow-blue-500/20">
-                  <User className="w-6 h-6" />
-                </div>
-                <div>
-                  <div className="flex items-center space-x-2">
-                    <h3 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
-                      {activePedestal.userName}
-                    </h3>
-                    <span className="text-xs font-mono font-extrabold px-2.5 py-1 rounded-lg bg-purple-50 text-purple-700 border border-purple-200 shadow-2xs">
-                      目前客戶編號：{activePedestal.customerId}
-                    </span>
-                  </div>
-                  <div className="flex items-center text-xs text-slate-500 mt-1">
-                    <MapPin className="w-3.5 h-3.5 text-blue-600 mr-1" />
-                    目標位置：<strong className="text-slate-800 font-semibold">{activePedestal.zone} 第 {activePedestal.colIndex} 排 (第 {activePedestal.slotIndex} 格)</strong>
-                  </div>
-                </div>
-              </div>
+          return (
+            <div className="mt-5 max-w-3xl mx-auto bg-white rounded-3xl p-5 sm:p-6 shadow-xl border-2 border-blue-200/80 relative overflow-hidden transition-all animate-fadeIn">
+              {/* Background Decorative Accent */}
+              <div className="absolute -top-12 -right-12 w-36 h-36 bg-blue-100/50 rounded-full blur-2xl pointer-events-none" />
 
-              {/* Status Badge & Toggle Button */}
-              <div className="flex items-center space-x-2">
-                <span
-                  className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold border ${
-                    activePedestal.status === 'moved'
-                      ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
-                      : 'bg-amber-50 text-amber-700 border-amber-300'
-                  }`}
-                >
-                  {activePedestal.status === 'moved' ? (
-                    <>
-                      <CheckCircle2 className="w-4 h-4 mr-1 text-emerald-600" />
-                      已完成搬遷
-                    </>
-                  ) : (
-                    <>
-                      <Clock className="w-4 h-4 mr-1 text-amber-600" />
-                      待整座推運搬遷
-                    </>
-                  )}
-                </span>
-                
-                <button
-                  onClick={() => onToggleStatus(activePedestal.id)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all shadow-2xs ${
-                    activePedestal.status === 'moved'
-                      ? 'bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300'
-                      : 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-emerald-600/20'
-                  }`}
-                >
-                  {activePedestal.status === 'moved' ? '改標記為未搬' : '點擊標記為已搬'}
-                </button>
-              </div>
-            </div>
-
-            {/* Middle Key Mapping Box */}
-            <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200/80 mb-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
-                
-                {/* Old Pedestal Box */}
-                <div className="bg-white p-3.5 rounded-xl border border-amber-200/80 shadow-2xs">
-                  <span className="text-[11px] font-bold text-amber-800 bg-amber-100/80 px-2 py-0.5 rounded">
-                    舊位置 (整座搬離)
-                  </span>
-                  <div className="text-xl sm:text-2xl font-black font-mono text-slate-800 mt-1">
-                    {activePedestal.oldCode}
+              {/* Top Bar of Result Card */}
+              <div className="flex flex-wrap items-center justify-between border-b border-slate-100 pb-4 mb-4 gap-2">
+                <div className="flex items-center space-x-3">
+                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white flex items-center justify-center font-bold text-lg shadow-md shadow-blue-500/20">
+                    <User className="w-6 h-6" />
                   </div>
-                  <div className="text-xs text-slate-500 mt-0.5">
-                    舊區域：{activePedestal.oldZone} (第 {activePedestal.oldCol} 排 / 第 {activePedestal.oldRow} 格)
+                  <div>
+                    <div className="flex items-center space-x-2">
+                      <h3 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+                        {activePedestal.userName}
+                      </h3>
+                      <span className="text-xs font-mono font-extrabold px-2.5 py-1 rounded-lg bg-purple-50 text-purple-700 border border-purple-200 shadow-2xs">
+                        目前客戶編號：{activePedestal.customerId}
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap items-center text-xs text-slate-500 mt-1 gap-1.5">
+                      <div className="flex items-center text-blue-700 font-semibold">
+                        <MapPin className="w-3.5 h-3.5 text-blue-600 mr-1 shrink-0" />
+                        目標新位置：<strong>{parsedNew.formatted}</strong>
+                      </div>
+                      <span className="text-slate-300">|</span>
+                      <span className="text-slate-500">
+                        目前抽屜位置：<span className="font-mono text-slate-700">{activePedestal.zone}#第{activePedestal.colIndex}排-{activePedestal.slotIndex}格</span>
+                      </span>
+                    </div>
                   </div>
                 </div>
 
-                {/* New Pedestal Box */}
-                <div className="bg-blue-50/80 p-3.5 rounded-xl border border-blue-300 shadow-2xs relative">
-                  <span className="text-[11px] font-bold text-blue-800 bg-blue-100 px-2 py-0.5 rounded">
-                    新位置 (整座搬入)
-                  </span>
-                  <div className="text-xl sm:text-2xl font-black font-mono text-blue-700 mt-1">
-                    {activePedestal.newCode}
-                  </div>
-                  <div className="text-xs text-blue-900 font-medium mt-0.5">
-                    新區域：{activePedestal.zone} (縱向第 {activePedestal.colIndex} 排 / 第 {activePedestal.slotIndex} 格)
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Bottom Actions */}
-            <div className="flex flex-wrap items-center justify-between text-xs gap-2 pt-1">
-              <div className="text-slate-500">
-                {activePedestal.notes ? (
-                  <span className="inline-flex items-center text-amber-800 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200">
-                    <ShieldAlert className="w-3.5 h-3.5 mr-1 text-amber-600" />
-                    備註：{activePedestal.notes}
-                  </span>
-                ) : (
-                  <span>抽屜換抽屜：整座舊抽屜直接替換至新位置。</span>
-                )}
-              </div>
-
-              <div className="flex items-center space-x-2">
-                <button
-                  onClick={() => handleCopyText(activePedestal)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center space-x-1 border ${
-                    copied
-                      ? 'bg-emerald-600 text-white border-emerald-600'
-                      : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-300 shadow-2xs'
-                  }`}
-                >
-                  {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5 text-blue-600" />}
-                  <span>{copied ? '已複製指示文字' : '複製搬遷指示'}</span>
-                </button>
-
-                {onSelectPedestalOnMap && (
-                  <button
-                    onClick={() => onSelectPedestalOnMap(activePedestal)}
-                    className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs transition-colors shadow-2xs flex items-center space-x-1"
+                {/* Status Badge & Toggle Button */}
+                <div className="flex items-center space-x-2">
+                  <span
+                    className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold border ${
+                      activePedestal.status === 'moved'
+                        ? 'bg-emerald-50 text-emerald-700 border-emerald-300'
+                        : 'bg-amber-50 text-amber-700 border-amber-300'
+                    }`}
                   >
-                    <MapPin className="w-3.5 h-3.5" />
-                    <span>在地圖平面圖定位此櫃位</span>
+                    {activePedestal.status === 'moved' ? (
+                      <>
+                        <CheckCircle2 className="w-4 h-4 mr-1 text-emerald-600" />
+                        已完成搬遷
+                      </>
+                    ) : (
+                      <>
+                        <Clock className="w-4 h-4 mr-1 text-amber-600" />
+                        待整座推運搬遷
+                      </>
+                    )}
+                  </span>
+                  
+                  <button
+                    onClick={() => onToggleStatus(activePedestal.id)}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all shadow-2xs ${
+                      activePedestal.status === 'moved'
+                        ? 'bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300'
+                        : 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-emerald-600/20'
+                    }`}
+                  >
+                    {activePedestal.status === 'moved' ? '改標記為未搬' : '點擊標記為已搬'}
                   </button>
-                )}
+                </div>
+              </div>
+
+              {/* Middle Key Mapping Box */}
+              <div className="bg-slate-50 rounded-2xl p-4 border border-slate-200/80 mb-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
+                  
+                  {/* Old Pedestal Box */}
+                  <div className="bg-white p-3.5 rounded-xl border border-amber-200/80 shadow-2xs">
+                    <span className="text-[11px] font-bold text-amber-800 bg-amber-100/80 px-2 py-0.5 rounded">
+                      舊位置 (整座搬離)
+                    </span>
+                    <div className="text-xl sm:text-2xl font-black font-mono text-slate-800 mt-1">
+                      {activePedestal.oldCode}
+                    </div>
+                    <div className="text-xs text-slate-600 mt-0.5 font-medium">
+                      舊區域：{parsedOld.formatted}
+                    </div>
+                  </div>
+
+                  {/* New Pedestal Box */}
+                  <div className="bg-blue-50/80 p-3.5 rounded-xl border border-blue-300 shadow-2xs relative">
+                    <span className="text-[11px] font-bold text-blue-800 bg-blue-100 px-2 py-0.5 rounded">
+                      新位置 (整座搬入)
+                    </span>
+                    <div className="text-xl sm:text-2xl font-black font-mono text-blue-700 mt-1">
+                      {activePedestal.newCode}
+                    </div>
+                    <div className="text-xs text-blue-900 font-medium mt-0.5">
+                      新區域：{parsedNew.formatted}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Bottom Actions */}
+              <div className="flex flex-wrap items-center justify-between text-xs gap-2 pt-1">
+                <div className="text-slate-500">
+                  {activePedestal.notes ? (
+                    <span className="inline-flex items-center text-amber-800 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200">
+                      <ShieldAlert className="w-3.5 h-3.5 mr-1 text-amber-600" />
+                      備註：{activePedestal.notes}
+                    </span>
+                  ) : (
+                    <span>抽屜換抽屜：整座舊抽屜直接替換至新位置。</span>
+                  )}
+                </div>
+
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={() => handleCopyText(activePedestal)}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center space-x-1 border ${
+                      copied
+                        ? 'bg-emerald-600 text-white border-emerald-600'
+                        : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-300 shadow-2xs'
+                    }`}
+                  >
+                    {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5 text-blue-600" />}
+                    <span>{copied ? '已複製指示文字' : '複製搬遷指示'}</span>
+                  </button>
+
+                  {onSelectPedestalOnMap && (
+                    <button
+                      onClick={() => onSelectPedestalOnMap(activePedestal)}
+                      className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs transition-colors shadow-2xs flex items-center space-x-1"
+                    >
+                      <MapPin className="w-3.5 h-3.5" />
+                      <span>在地圖平面圖定位此櫃位</span>
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        ) : null}
+          );
+        })() : null}
       </div>
     </section>
   );

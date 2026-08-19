@@ -152,6 +152,7 @@ export function subscribeToPedestals(
 
         const itemsMap = new Map<string, Pedestal>();
         let hadLegacyPrefix = false;
+        let needsSyncFix = false;
 
         snapshot.forEach((docSnap) => {
           const raw = docSnap.data();
@@ -159,6 +160,31 @@ export function subscribeToPedestals(
             hadLegacyPrefix = true;
           }
           const pedestal = parsePedestalFromFirestore(raw, docSnap.id);
+
+          // 自動校正 GT6211 (Kimber) 與 GT1222 (Jin) 指定之新舊位置
+          if (pedestal.id === 'pedestal-A-1-5' || pedestal.customerId === 'GT6211') {
+            if (pedestal.oldCode !== 'C區#2-1' || pedestal.newLocation !== 'B區#6-6') {
+              pedestal.oldCode = 'C區#2-1';
+              pedestal.oldZone = 'C區';
+              pedestal.oldCol = 2;
+              pedestal.oldRow = 1;
+              pedestal.newLocation = 'B區#6-6';
+              pedestal.newCode = 'B區#6-6';
+              needsSyncFix = true;
+            }
+          } else if (pedestal.id === 'pedestal-C-2-1' || pedestal.customerId === 'GT1222') {
+            if (pedestal.oldCode !== 'A區#1-5' || pedestal.newLocation !== 'A區#1-5') {
+              pedestal.oldCode = 'A區#1-5';
+              pedestal.oldZone = 'A區';
+              pedestal.oldCol = 1;
+              pedestal.oldRow = 5;
+              pedestal.newLocation = 'A區#1-5';
+              pedestal.newCode = 'A區#1-5';
+              pedestal.status = 'moved';
+              needsSyncFix = true;
+            }
+          }
+
           itemsMap.set(pedestal.id, pedestal);
         });
 
@@ -174,10 +200,10 @@ export function subscribeToPedestals(
 
         const sorted = sortPedestals(mergedList);
 
-        // If legacy prefix was detected in Firestore documents, silently update Firestore in batch
-        if (hadLegacyPrefix) {
+        // If legacy prefix or custom fixes were detected in Firestore documents, silently update Firestore in batch
+        if (hadLegacyPrefix || needsSyncFix) {
           saveAllPedestalsToFirestore(sorted).catch((err) => {
-            console.warn('Silently updated legacy prefix in Firestore:', err);
+            console.warn('Silently updated corrected locations in Firestore:', err);
           });
         }
 

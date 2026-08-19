@@ -33,7 +33,7 @@ export const ZONES: ZoneInfo[] = [
 // A 區 67 格目前客戶編號位置 (依據現場 11 排直排對照表)
 const A_ZONE_CUSTOMER_IDS: string[][] = [
   // 第 1 排 (7 格)
-  ['GT1181', 'GT1181', 'GT1216', 'GT1216', 'GT1222', 'GT1236', 'GT1251'],
+  ['GT1181', 'GT1181', 'GT1216', 'GT1216', 'GT6211', 'GT1236', 'GT1251'],
   // 第 2 排 (6 格)
   ['GT6583', 'GT1282', 'GT1312', 'GT1359', 'GT1706', 'GT1706'],
   // 第 3 排 (6 格)
@@ -85,7 +85,7 @@ const A_ZONE_CODES: string[][] = [
 // A 區 67 格新目標位置 (依據現場 11 排由左至右、每排由上至下對照表)
 const A_ZONE_NEW_LOCATIONS: string[][] = [
   // 第 1 排 (7 格)
-  ['A區#1-1', 'A區#1-2', 'A區#1-3', 'A區#1-4', 'A區#1-5', 'A區#1-6', 'A區#1-7'],
+  ['A區#1-1', 'A區#1-2', 'A區#1-3', 'A區#1-4', 'B區#6-6', 'A區#1-6', 'A區#1-7'],
   // 第 2 排 (6 格)
   ['B區#8-5', 'A區#2-2', 'A區#2-6', 'A區#3-1', 'A區#6-3', 'A區#6-4'],
   // 第 3 排 (6 格)
@@ -209,7 +209,7 @@ const C_ZONE_CUSTOMER_IDS: string[][] = [
   // 第 1 排 (6 格)
   ['GT6417', 'GT8988', 'GT7399', 'GT6235', 'GT4848', 'GT5363'],
   // 第 2 排 (6 格)
-  ['GT6211', 'GT1932', 'GT7399', 'GT6235', 'GT8946', 'GT12390'],
+  ['GT1222', 'GT1932', 'GT7399', 'GT6235', 'GT8946', 'GT12390'],
   // 第 3 排 (6 格)
   ['GT6154', 'GT1813', 'GT12711', 'GT7184', 'GT6582', 'GT12721'],
   // 第 4 排 (6 格)
@@ -229,7 +229,7 @@ const C_ZONE_NEW_LOCATIONS: string[][] = [
   // 第 1 排 (6 格)
   ['B區#8-1', 'C區#2-1', 'B區#12-6', 'B區#7-1', 'A區#11-5', 'B區#1-2'],
   // 第 2 排 (6 格)
-  ['B區#6-6', 'A區#8-2', 'B區#13-1', 'B區#7-2', 'C區#1-3', 'C區#5-3'],
+  ['A區#1-5', 'A區#8-2', 'B區#13-1', 'B區#7-2', 'C區#1-3', 'C區#5-3'],
   // 第 3 排 (6 格)
   ['B區#6-5', 'A區#7-5', 'C區#6-5', 'B區#12-3', 'B區#8-4', 'C區#6-6'],
   // 第 4 排 (6 格)
@@ -470,11 +470,21 @@ function generateInitialPedestals(): Pedestal[] {
       const customerId = A_ZONE_CUSTOMER_IDS[colIdx]?.[slotIdx] || codeName;
       const userName = getStaffNameByCustomerId(customerId);
 
-      const oldCol = colNumber;
-      const oldRow = slotNumber;
-      const oldZone = 'A區';
-      const oldCode = `${oldZone}#${oldCol}-${oldRow}`;
-      const targetNewLocation = A_ZONE_NEW_LOCATIONS[colIdx]?.[slotIdx] || `A區#${colNumber}-${slotNumber}`;
+      let oldCol = colNumber;
+      let oldRow = slotNumber;
+      let oldZone = 'A區';
+      let oldCode = `${oldZone}#${oldCol}-${oldRow}`;
+      let targetNewLocation = A_ZONE_NEW_LOCATIONS[colIdx]?.[slotIdx] || `A區#${colNumber}-${slotNumber}`;
+
+      // 特殊指定：A區 GT6211 (Kimber) 舊位置為 C區#2-1，新位置為 B區#6-6
+      if (customerId === 'GT6211' || (colNumber === 1 && slotNumber === 5)) {
+        oldZone = 'C區';
+        oldCol = 2;
+        oldRow = 1;
+        oldCode = 'C區#2-1';
+        targetNewLocation = 'B區#6-6';
+      }
+
       const newCode = targetNewLocation;
       const isMoved = oldCode === targetNewLocation;
 
@@ -552,11 +562,21 @@ function generateInitialPedestals(): Pedestal[] {
       const customerId = C_ZONE_CUSTOMER_IDS[colIdx]?.[slotIdx] || codeName;
       const userName = getStaffNameByCustomerId(customerId);
 
-      const oldCol = colNumber;
-      const oldRow = slotNumber;
-      const oldZone = 'C區';
-      const oldCode = `${oldZone}#${oldCol}-${oldRow}`;
-      const targetNewLocation = C_ZONE_NEW_LOCATIONS[colIdx]?.[slotIdx] || `C區#${colNumber}-${slotNumber}`;
+      let oldCol = colNumber;
+      let oldRow = slotNumber;
+      let oldZone = 'C區';
+      let oldCode = `${oldZone}#${oldCol}-${oldRow}`;
+      let targetNewLocation = C_ZONE_NEW_LOCATIONS[colIdx]?.[slotIdx] || `C區#${colNumber}-${slotNumber}`;
+
+      // 特殊指定：C區 GT1222 (Jin) 舊位置為 A區#1-5，新位置為 A區#1-5
+      if (customerId === 'GT1222' || (colNumber === 2 && slotNumber === 1)) {
+        oldZone = 'A區';
+        oldCol = 1;
+        oldRow = 5;
+        oldCode = 'A區#1-5';
+        targetNewLocation = 'A區#1-5';
+      }
+
       const newCode = targetNewLocation;
       const isMoved = oldCode === targetNewLocation;
 
@@ -585,6 +605,36 @@ function generateInitialPedestals(): Pedestal[] {
   });
 
   return list;
+}
+
+// Helper to parse any location code (e.g. "B區#1-4", "A區#1-5", "C區#2-1") into zone, column, row, and readable text
+export function parseLocationCode(code: string): {
+  zone: string;
+  col: number;
+  row: number;
+  formatted: string;
+} {
+  if (!code) return { zone: '', col: 0, row: 0, formatted: '' };
+  const clean = code.trim();
+  const match = clean.match(/^([ABCabc]區?)[#\s]?(\d+)[-#\s](\d+)$/);
+  if (match) {
+    let zone = match[1].toUpperCase();
+    if (!zone.includes('區')) zone = `${zone}區`;
+    const col = parseInt(match[2], 10);
+    const row = parseInt(match[3], 10);
+    return {
+      zone,
+      col,
+      row,
+      formatted: `${zone} (縱向第 ${col} 排 / 第 ${row} 格)`,
+    };
+  }
+  return {
+    zone: clean,
+    col: 0,
+    row: 0,
+    formatted: clean,
+  };
 }
 
 // Helper to get fixed new location for any zone, col, slot
