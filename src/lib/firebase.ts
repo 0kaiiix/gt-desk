@@ -161,19 +161,16 @@ export function subscribeToPedestals(
           }
           const pedestal = parsePedestalFromFirestore(raw, docSnap.id);
 
-          // 自動校正 GT6211 (Kimber) 與 GT1222 (Jin) 指定之新舊位置
-          if (pedestal.id === 'pedestal-A-1-5' || pedestal.customerId === 'GT6211') {
-            if (pedestal.oldCode !== 'C區#2-1' || pedestal.newLocation !== 'B區#6-6') {
-              pedestal.oldCode = 'C區#2-1';
-              pedestal.oldZone = 'C區';
-              pedestal.oldCol = 2;
-              pedestal.oldRow = 1;
-              pedestal.newLocation = 'B區#6-6';
-              pedestal.newCode = 'B區#6-6';
-              needsSyncFix = true;
-            }
-          } else if (pedestal.id === 'pedestal-C-2-1' || pedestal.customerId === 'GT1222') {
-            if (pedestal.oldCode !== 'A區#1-5' || pedestal.newLocation !== 'A區#1-5') {
+          // 自動校正 GT1222 (Jin in A區#1-5) 與 GT6211 (Kimber in C區#2-1)
+          if (pedestal.id === 'pedestal-A-1-5' || pedestal.customerId === 'GT1222') {
+            if (
+              pedestal.customerId !== 'GT1222' ||
+              pedestal.userName !== 'Jin' ||
+              pedestal.oldCode !== 'A區#1-5' ||
+              pedestal.newLocation !== 'A區#1-5'
+            ) {
+              pedestal.customerId = 'GT1222';
+              pedestal.userName = 'Jin';
               pedestal.oldCode = 'A區#1-5';
               pedestal.oldZone = 'A區';
               pedestal.oldCol = 1;
@@ -181,6 +178,23 @@ export function subscribeToPedestals(
               pedestal.newLocation = 'A區#1-5';
               pedestal.newCode = 'A區#1-5';
               pedestal.status = 'moved';
+              needsSyncFix = true;
+            }
+          } else if (pedestal.id === 'pedestal-C-2-1' || pedestal.customerId === 'GT6211') {
+            if (
+              pedestal.customerId !== 'GT6211' ||
+              pedestal.userName !== 'Kimber' ||
+              pedestal.oldCode !== 'C區#2-1' ||
+              pedestal.newLocation !== 'B區#6-6'
+            ) {
+              pedestal.customerId = 'GT6211';
+              pedestal.userName = 'Kimber';
+              pedestal.oldCode = 'C區#2-1';
+              pedestal.oldZone = 'C區';
+              pedestal.oldCol = 2;
+              pedestal.oldRow = 1;
+              pedestal.newLocation = 'B區#6-6';
+              pedestal.newCode = 'B區#6-6';
               needsSyncFix = true;
             }
           }
