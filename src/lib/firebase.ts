@@ -12,6 +12,7 @@ import {
 } from 'firebase/firestore';
 import { getAuth, signInAnonymously } from 'firebase/auth';
 import { Pedestal } from '../types';
+import { isSameLocation } from '../data/initialData';
 import firebaseConfigData from '../../firebase-applet-config.json';
 
 // Firebase configuration from firebase-applet-config.json
@@ -195,6 +196,7 @@ export function subscribeToPedestals(
               pedestal.oldRow = 1;
               pedestal.newLocation = 'B區#6-6';
               pedestal.newCode = 'B區#6-6';
+              pedestal.status = isSameLocation('C區#2-1', 'B區#6-6') ? 'moved' : 'pending';
               needsSyncFix = true;
             }
           }
@@ -202,13 +204,46 @@ export function subscribeToPedestals(
           itemsMap.set(pedestal.id, pedestal);
         });
 
-        // Ensure all 199 initial pedestals are present
+        // Ensure all 199 initial pedestals are present and sync definitions if updated
         const mergedList: Pedestal[] = [];
         initialData.forEach((defaultItem) => {
           if (itemsMap.has(defaultItem.id)) {
-            mergedList.push(itemsMap.get(defaultItem.id)!);
+            const current = itemsMap.get(defaultItem.id)!;
+            // If default definition has updated newLocation, customerId, or oldCode, sync it
+            if (
+              current.newLocation !== defaultItem.newLocation ||
+              current.newCode !== defaultItem.newCode ||
+              current.customerId !== defaultItem.customerId ||
+              current.oldCode !== defaultItem.oldCode
+            ) {
+              current.newLocation = defaultItem.newLocation;
+              current.newCode = defaultItem.newCode;
+              current.customerId = defaultItem.customerId;
+              current.userName = defaultItem.userName;
+              current.oldCode = defaultItem.oldCode;
+              current.oldZone = defaultItem.oldZone;
+              current.oldCol = defaultItem.oldCol;
+              current.oldRow = defaultItem.oldRow;
+              needsSyncFix = true;
+            }
+
+            // 狀態校正：新舊位置相同者自動標記為已搬遷 (moved)；
+            // 若新舊位置不同且抽屜尚未實際移位至目標位置，則應為待搬遷 (pending)
+            const isTargetSameAsOld = isSameLocation(current.oldCode, current.newLocation);
+            const isCurrentlyAtOldSpot = current.oldCode === `${current.zone}#${current.colIndex}-${current.slotIndex}`;
+
+            if (!isTargetSameAsOld && isCurrentlyAtOldSpot && current.status === 'moved') {
+              current.status = 'pending';
+              needsSyncFix = true;
+            } else if (isTargetSameAsOld && current.status !== 'moved') {
+              current.status = 'moved';
+              needsSyncFix = true;
+            }
+
+            mergedList.push(current);
           } else {
             mergedList.push(defaultItem);
+            needsSyncFix = true;
           }
         });
 
