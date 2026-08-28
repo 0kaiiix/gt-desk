@@ -224,19 +224,8 @@ export function subscribeToPedestals(
               current.oldZone = defaultItem.oldZone;
               current.oldCol = defaultItem.oldCol;
               current.oldRow = defaultItem.oldRow;
-              needsSyncFix = true;
-            }
-
-            // 狀態校正：新舊位置相同者自動標記為已搬遷 (moved)；
-            // 若新舊位置不同且抽屜尚未實際移位至目標位置，則應為待搬遷 (pending)
-            const isTargetSameAsOld = isSameLocation(current.oldCode, current.newLocation);
-            const isCurrentlyAtOldSpot = current.oldCode === `${current.zone}#${current.colIndex}-${current.slotIndex}`;
-
-            if (!isTargetSameAsOld && isCurrentlyAtOldSpot && current.status === 'moved') {
-              current.status = 'pending';
-              needsSyncFix = true;
-            } else if (isTargetSameAsOld && current.status !== 'moved') {
-              current.status = 'moved';
+              // 僅在目標位置定義變更時，重新以新舊位置是否相同重置初始狀態
+              current.status = isSameLocation(current.oldCode, current.newLocation) ? 'moved' : 'pending';
               needsSyncFix = true;
             }
 
