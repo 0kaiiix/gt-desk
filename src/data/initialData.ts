@@ -87,25 +87,25 @@ const A_ZONE_NEW_LOCATIONS: string[][] = [
   // 第 1 排 (7 格)
   ['A區#1-1', 'A區#1-2', 'A區#1-3', 'A區#1-4', 'A區#1-5', 'A區#1-6', 'A區#1-7'],
   // 第 2 排 (6 格)
-  ['B區#8-5', 'A區#2-2', 'A區#2-6', 'A區#3-1', 'A區#6-3', 'A區#6-4'],
+  ['B區#8-6', 'A區#2-2', 'A區#2-6', 'A區#3-1', 'A區#6-4', 'A區#6-5'],
   // 第 3 排 (6 格)
-  ['A區#3-2', 'B區#6-2', 'B區#10-3', 'A區#6-2', 'A區#4-4', 'C區#5-4'],
+  ['A區#3-2', 'B區#6-3', 'B區#10-4', 'A區#6-3', 'A區#4-4', 'C區#5-4'],
   // 第 4 排 (6 格)
-  ['A區#4-1', 'B區#5-6', 'B區#1-4', 'C區#4-1', 'A區#4-5', 'C區#5-5'],
+  ['A區#4-1', 'B區#6-1', 'B區#1-5', 'C區#4-1', 'A區#4-5', 'C區#5-5'],
   // 第 5 排 (6 格)
-  ['B區#5-5', 'B區#6-1', 'B區#1-5', 'C區#4-2', 'A區#5-4', 'B區#11-4'],
+  ['B區#5-6', 'B區#6-2', 'B區#1-6', 'C區#4-2', 'A區#5-4', 'B區#11-4'],
   // 第 6 排 (6 格)
-  ['C區#4-3', 'A區#4-2', 'C區#3-2', 'C區#6-1', 'B區#7-4', 'B區#7-5'],
+  ['C區#4-3', 'A區#4-2', 'C區#3-2', 'C區#6-1', 'B區#8-1', 'B區#7-6'],
   // 第 7 排 (6 格)
-  ['A區#11-6', 'A區#7-2', 'A區#5-5', 'A區#5-6', 'A區#6-1', 'C區#6-4'],
+  ['B區#1-1', 'A區#7-3', 'A區#5-5', 'A區#5-6', 'A區#6-1', 'C區#6-4'],
   // 第 8 排 (6 格)
-  ['A區#11-4', 'A區#9-1', 'A區#8-3', 'A區#8-4', 'A區#10-3', 'A區#11-2'],
+  ['A區#11-5', 'A區#9-2', 'A區#8-4', 'A區#8-5', 'A區#10-4', 'A區#11-3'],
   // 第 9 排 (6 格)
-  ['B區#4-1', 'A區#9-2', 'C區#3-5', 'A區#10-2', 'B區#13-2', 'A區#10-5'],
+  ['B區#4-2', 'A區#9-3', 'C區#3-5', 'A區#10-3', 'B區#13-2', 'A區#10-6'],
   // 第 10 排 (6 格)
-  ['C區#3-3', 'C區#1-4', 'C區#3-6', 'A區#6-6', 'A區#7-1', 'A區#7-3'],
+  ['C區#3-3', 'C區#1-4', 'C區#3-6', 'A區#7-1', 'A區#7-2', 'A區#7-4'],
   // 第 11 排 (6 格)
-  ['B區#3-6', 'A區#5-1', 'A區#5-2', 'B區#5-4', 'A區#7-4', 'B區#14-5'],
+  ['B區#4-1', 'A區#5-1', 'A區#5-2', 'B區#5-5', 'A區#7-5', 'B區#14-5'],
 ];
 
 // B 區 84 格目前客戶編號位置 (依據現場 14 排由左至右、每排由上至下對照表)
@@ -127,7 +127,7 @@ const B_ZONE_CUSTOMER_IDS: string[][] = [
   // 第 8 排 (6 格)
   ['GT10066', 'GT3062', 'GT12284', 'GT2023', 'GT8690', 'GT12388'],
   // 第 9 排 (6 格)
-  ['GT1861', 'GT6666', 'GT12760', 'GT1386', 'GT6764', 'GT8824'],
+  ['GT1861', 'GT6666', 'GT12760', 'GT1386', 'GT1636', 'GT8824'],
   // 第 10 排 (6 格)
   ['GT12858', 'GT1303', 'GT1303', 'GT6255', 'GT5366', 'GT5638'],
   // 第 11 排 (6 格)
@@ -143,31 +143,31 @@ const B_ZONE_CUSTOMER_IDS: string[][] = [
 // B 區 84 格新目標位置 (依據現場 14 排由左至右、每排由上至下對照表)
 const B_ZONE_NEW_LOCATIONS: string[][] = [
   // 第 1 排 (6 格)
-  ['B區#1-1', 'B區#10-6', 'A區#10-1', 'B區#9-6', 'C區#7-6', 'B區#1-6'],
+  ['B區#1-2', 'B區#10-6', 'A區#10-2', 'B區#10-1', 'C區#7-6', 'B區#2-1'],
   // 第 2 排 (6 格)
-  ['C區#4-5', 'C區#3-4', 'A區#4-6', 'C區#1-5', 'B區#2-4', 'B區#2-6'],
+  ['C區#4-5', 'C區#3-4', 'A區#4-6', 'C區#1-5', 'B區#2-5', 'B區#3-1'],
   // 第 3 排 (6 格)
-  ['C區#6-2', 'B區#8-2', 'B區#4-5', 'B區#11-2', 'B區#2-2', 'B區#2-3'],
+  ['C區#6-2', 'B區#8-3', 'B區#4-6', 'B區#11-2', 'B區#2-3', 'B區#2-4'],
   // 第 4 排 (6 格)
-  ['B區#5-2', 'B區#4-2', 'B區#4-3', 'C區#8-2', 'B區#6-3', 'B區#4-6'],
+  ['B區#5-3', 'B區#4-3', 'B區#4-4', 'C區#8-2', 'B區#6-4', 'B區#5-1'],
   // 第 5 排 (6 格)
-  ['B區#5-1', 'B區#2-1', 'A區#11-3', 'A區#8-6', 'A區#2-1', 'C區#2-3'],
+  ['B區#5-2', 'B區#2-2', 'A區#11-4', 'A區#9-1', 'A區#2-1', 'C區#2-3'],
   // 第 6 排 (6 格)
-  ['B區#12-4', 'B區#8-6', 'B區#14-6', 'B區#6-4', 'B區#9-4', 'C區#8-4'],
+  ['B區#12-4', 'B區#9-1', 'B區#14-6', 'B區#6-5', 'B區#9-5', 'C區#8-4'],
   // 第 7 排 (6 格)
-  ['B區#9-1', 'A區#6-5', 'B區#7-6', 'A區#4-3', 'A區#9-3', 'C區#3-1'],
+  ['B區#9-2', 'A區#6-6', 'B區#7-2', 'A區#4-3', 'A區#9-4', 'C區#3-1'],
   // 第 8 排 (6 格)
-  ['C區#2-5', 'A區#10-4', 'C區#4-4', 'A區#9-4', 'B區#13-5', 'C區#5-2'],
+  ['C區#2-5', 'A區#10-5', 'C區#4-4', 'A區#9-5', 'B區#13-5', 'C區#5-2'],
   // 第 9 排 (6 格)
-  ['A區#7-6', 'B區#9-2', 'C區#7-2', 'A區#3-6', 'B區#10-5', 'B區#14-2'],
+  ['A區#8-1', 'B區#9-3', 'C區#7-2', 'A區#3-6', 'A區#6-2', 'B區#14-2'],
   // 第 10 排 (6 格)
-  ['C區#8-5', 'A區#2-4', 'A區#2-5', 'B區#7-3', 'B區#1-3', 'B區#3-5'],
+  ['C區#8-5', 'A區#2-4', 'A區#2-5', 'B區#7-5', 'B區#1-4', 'B區#3-6'],
   // 第 11 排 (6 格)
-  ['B區#10-2', 'A區#8-1', 'B區#11-3', 'A區#2-3', 'B區#11-5', 'A區#10-6'],
+  ['B區#10-3', 'A區#8-2', 'B區#11-3', 'A區#2-3', 'B區#11-5', 'A區#11-1'],
   // 第 12 排 (6 格)
-  ['C區#2-6', 'B區#12-2', 'A區#8-5', 'B區#3-4', 'B區#12-5', 'C區#1-6'],
+  ['C區#2-6', 'B區#12-2', 'A區#8-6', 'B區#3-5', 'B區#12-5', 'C區#1-6'],
   // 第 13 排 (6 格)
-  ['C區#1-1', 'B區#3-3', 'B區#11-6', 'A區#9-5', 'B區#13-4', 'A區#3-3'],
+  ['C區#1-1', 'B區#3-4', 'B區#11-6', 'A區#9-6', 'B區#13-4', 'A區#3-3'],
   // 第 14 排 (6 格)
   ['C區#1-2', 'C區#2-2', 'B區#14-3', 'B區#14-4', 'A區#3-4', 'A區#3-5'],
 ];
@@ -227,21 +227,21 @@ const C_ZONE_CUSTOMER_IDS: string[][] = [
 // C 區 48 格新目標位置 (依據現場 8 排由左至右、每排由上至下對照表)
 const C_ZONE_NEW_LOCATIONS: string[][] = [
   // 第 1 排 (6 格)
-  ['B區#8-1', 'C區#2-1', 'B區#12-6', 'B區#7-1', 'A區#11-5', 'B區#1-2'],
+  ['B區#8-2', 'C區#2-1', 'B區#12-6', 'B區#7-3', 'A區#11-6', 'B區#1-3'],
   // 第 2 排 (6 格)
-  ['B區#6-6', 'A區#8-2', 'B區#13-1', 'B區#7-2', 'C區#1-3', 'C區#5-3'],
+  ['B區#7-1', 'A區#8-3', 'B區#13-1', 'B區#7-4', 'C區#1-3', 'C區#5-3'],
   // 第 3 排 (6 格)
-  ['B區#6-5', 'A區#7-5', 'C區#6-5', 'B區#12-3', 'B區#8-4', 'C區#6-6'],
+  ['B區#6-6', 'A區#7-6', 'C區#6-5', 'B區#12-3', 'B區#8-5', 'C區#6-6'],
   // 第 4 排 (6 格)
-  ['A區#5-3', 'C區#5-6', 'A區#9-6', 'B區#4-4', 'B區#2-5', 'C區#2-4'],
+  ['A區#5-3', 'C區#5-6', 'A區#10-1', 'B區#4-5', 'B區#2-6', 'C區#2-4'],
   // 第 5 排 (6 格)
-  ['C區#7-1', 'C區#7-3', 'B區#12-1', 'C區#6-3', 'B區#3-1', 'C區#4-6'],
+  ['C區#7-1', 'C區#7-3', 'B區#12-1', 'C區#6-3', 'B區#3-2', 'C區#4-6'],
   // 第 6 排 (6 格)
-  ['B區#8-3', 'B區#13-6', 'C區#7-4', 'C區#5-1', 'A區#11-1', 'B區#10-4'],
+  ['B區#8-4', 'B區#13-6', 'C區#7-4', 'C區#5-1', 'A區#11-2', 'B區#10-5'],
   // 第 7 排 (6 格)
-  ['C區#7-5', 'B區#9-3', 'B區#5-3', 'B區#13-3', 'B區#9-5', 'C區#8-1'],
+  ['C區#7-5', 'B區#9-4', 'B區#5-4', 'B區#13-3', 'B區#9-6', 'C區#8-1'],
   // 第 8 排 (6 格)
-  ['B區#11-1', 'B區#14-1', 'B區#3-2', 'B區#10-1', 'C區#8-3', 'C區#8-6'],
+  ['B區#11-1', 'B區#14-1', 'B區#3-3', 'B區#10-2', 'C區#8-3', 'C區#8-6'],
 ];
 
 // C 區 48 格新抽屜代號 (依據現場 8 排由左至右、每排由上至下對照表)
@@ -486,7 +486,7 @@ function generateInitialPedestals(): Pedestal[] {
       }
 
       const newCode = targetNewLocation;
-      const isMoved = oldCode === targetNewLocation;
+      const isMoved = isSameLocation(oldCode, targetNewLocation);
 
       list.push({
         id: `pedestal-A-${colNumber}-${slotNumber}`,
@@ -527,7 +527,7 @@ function generateInitialPedestals(): Pedestal[] {
       const oldCode = `${oldZone}#${oldCol}-${oldRow}`;
       const targetNewLocation = B_ZONE_NEW_LOCATIONS[colIdx]?.[slotIdx] || `B區#${colNumber}-${slotNumber}`;
       const newCode = targetNewLocation;
-      const isMoved = oldCode === targetNewLocation;
+      const isMoved = isSameLocation(oldCode, targetNewLocation);
 
       list.push({
         id: `pedestal-B-${colNumber}-${slotNumber}`,
@@ -578,7 +578,7 @@ function generateInitialPedestals(): Pedestal[] {
       }
 
       const newCode = targetNewLocation;
-      const isMoved = oldCode === targetNewLocation;
+      const isMoved = isSameLocation(oldCode, targetNewLocation);
 
       list.push({
         id: `pedestal-C-${colNumber}-${slotNumber}`,
@@ -605,6 +605,17 @@ function generateInitialPedestals(): Pedestal[] {
   });
 
   return list;
+}
+
+// Helper to check if two locations refer to the exact same position
+export function isSameLocation(loc1?: string, loc2?: string): boolean {
+  if (!loc1 || !loc2) return false;
+  const p1 = parseLocationCode(loc1);
+  const p2 = parseLocationCode(loc2);
+  if (p1.zone && p2.zone && p1.col > 0 && p2.col > 0 && p1.row > 0 && p2.row > 0) {
+    return p1.zone === p2.zone && p1.col === p2.col && p1.row === p2.row;
+  }
+  return loc1.trim().replace(/[#\s]/g, '') === loc2.trim().replace(/[#\s]/g, '');
 }
 
 // Helper to parse any location code (e.g. "B區#1-4", "A區#1-5", "C區#2-1") into zone, column, row, and readable text
@@ -667,7 +678,7 @@ export function recalculatePedestalsOrder(
     // 新位置與 GT 抽屜代號綁定，保持該抽屜原本的目標新位置不變
     const newLocation = item.newLocation || oldCode;
     const newCode = newLocation;
-    const isMoved = oldCode === newLocation;
+    const isMoved = isSameLocation(oldCode, newLocation);
 
     return {
       ...item,
@@ -739,7 +750,7 @@ export function movePedestalBetweenSlots(
       const targetNewOldCode = `${sourceZone}#${sourceCol}-${sourceSlot}`;
 
       // Source item (GT 抽屜) 移動至 target 格位：
-      // 舊位置變成 targetNewOldCode，新位置仍綁定 sourceItem.newLocation (目標值不變)
+      // 舊位置變成 sourceNewOldCode，新位置仍綁定 sourceItem.newLocation (目標值不變)
       const updatedSourceItem: Pedestal = {
         ...sourceItem,
         zone: targetZone,
@@ -753,7 +764,7 @@ export function movePedestalBetweenSlots(
         oldCode: sourceNewOldCode,
         newLocation: sourceItem.newLocation, // 永久跟隨此 GT 抽屜
         newCode: sourceItem.newLocation || sourceNewOldCode,
-        status: sourceNewOldCode === sourceItem.newLocation ? 'moved' : 'pending',
+        status: isSameLocation(sourceNewOldCode, sourceItem.newLocation) ? 'moved' : 'pending',
         updatedAt: new Date().toISOString(),
       };
 
@@ -772,7 +783,7 @@ export function movePedestalBetweenSlots(
         oldCode: targetNewOldCode,
         newLocation: targetItem.newLocation, // 永久跟隨此 GT 抽屜
         newCode: targetItem.newLocation || targetNewOldCode,
-        status: targetNewOldCode === targetItem.newLocation ? 'moved' : 'pending',
+        status: isSameLocation(targetNewOldCode, targetItem.newLocation) ? 'moved' : 'pending',
         updatedAt: new Date().toISOString(),
       };
 
